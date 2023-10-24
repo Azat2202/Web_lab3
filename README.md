@@ -1,6 +1,13 @@
 ## Лабораторная работа 3 по Веб-программированию
 ### Вариант 27199
 
+### Deployment
+В лабораторной работе сконфигурирован плагин wildfly-maven-plugin и настроен auto-deploy
+Для работы надо сконфигурировать путь в jboss-home в pom.xml
+* Старт сервера: `mvn wildfly:start`
+* Обновление .war: `mvn wildfly:redeploy`
+* Выключение сервера: `mvn wiildfly:shutdown`
+
 
 
 
