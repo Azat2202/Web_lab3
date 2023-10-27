@@ -1,7 +1,7 @@
 class Clock {
     constructor() {
         this.setClock();
-        setInterval(this.setClock, 10000);
+        setInterval(this.setClock, 1000);
     }
 
     setClock(){

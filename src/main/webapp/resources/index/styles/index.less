@@ -3,7 +3,7 @@
 .font-names {
   @font-face {
     font-family: 'Rostov';
-    src: url('../fonts/Rostov.ttf') format('truetype');
+    src: url('../../fonts/Rostov.ttf') format('truetype');
   }
 }
 
@@ -19,6 +19,10 @@
 //Some mixins
 .shadowing{
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.shadowing-strong{
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 }
 
 .bordering{
@@ -52,3 +56,17 @@ header{
   text-align: center;
 }
 
+input{
+  &.surfing-button{
+    transition: all ease 0.2s;
+    .bordering();
+    .shadowing();
+    padding: 0.5rem 1rem;
+    font-size: 1.2em;
+    margin-right: 1%;
+    &:hover{
+      .shadowing-strong();
+      background-color: @element-background;
+    }
+  }
+}

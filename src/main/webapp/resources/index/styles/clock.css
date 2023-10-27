@@ -1,8 +1,8 @@
 /*https://codepen.io/unnati-rana/pen/XWOJOzX*/
 
 :root {
-    --main-bg-color: #1e1f26;
-    --main-text-color: #ccc;
+    --main-bg-color: #EEEEEE;
+    --main-text-color: #222831;
 }
 
 .clock {
@@ -22,7 +22,7 @@
     inset 0 -5px 5px rgba(255, 255, 255, 0.05),
     0 5px 5px rgba(0, 0, 0, 0.3),
     inset 0 5px 5px rgba(0, 0, 0, 0.3);
-    transition: all ease 0.2s;
+    /*transition: all ease 0.2s;*/
 }
 
 .clock:before {
