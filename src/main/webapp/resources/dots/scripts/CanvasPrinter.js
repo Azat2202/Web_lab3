@@ -111,8 +111,6 @@ class CanvasPrinter{
         const x = (- (this.SIZE / 2 - xPixels) / pointInPixels).toFixed(4)
         const y = ((this.SIZE / 2 - yPixels) / pointInPixels).toFixed(4)
 
-        console.log(x, y)
-
         if(x > 2 || x < -2 || y > 3 || y < -3) {
             Swal.fire({
                 title: 'Клик вне зоны графика',
@@ -137,8 +135,6 @@ class CanvasPrinter{
                 { name: "y", value: y.toString() },
                 { name: "r", value: this.lastClickedR.toString() }
             ]
-        ).then(
-            canvasPrinter.redrawAll(canvasPrinter.lastClickedR)
         )
 
         updateGraph();
@@ -156,7 +152,7 @@ class CanvasPrinter{
             arrData.push({
                 "x": parseFloat(currentRow.find("td:eq(0)").text()),
                 "y": parseFloat(currentRow.find("td:eq(1)").text()),
-                "r": parseInt(currentRow.find("td:eq(2)").text()),
+                "r": parseFloat(currentRow.find("td:eq(2)").text()),
                 "status": currentRow.find("td:eq(3)").text() === "попадание",
                 "time": currentRow.find("td:eq(4)").text(),
                 "scriptTime": currentRow.find("td:eq(5)").text()
@@ -169,16 +165,16 @@ class CanvasPrinter{
     }
 
     drawPoint(x, y, r, success = true) {
+        const totalPoints = 8;
         let r_now = this.lastClickedR;
         if(r_now != null) {
             x *= r_now / r
             y *= r_now / r
-        }
 
+        }
         this.ctx.fillStyle = success
             ? this.COLOR_GREEN
             : this.COLOR_RED;
-        const totalPoints = 12;
         const pointInPixels = this.SIZE / totalPoints;
         this.ctx.beginPath();
         this.ctx.arc(

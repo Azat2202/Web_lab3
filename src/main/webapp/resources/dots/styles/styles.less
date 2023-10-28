@@ -66,6 +66,15 @@ input {
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     }
   }
+  &[type=button]{
+    .shadowing();
+    .bordering();
+    &.r-button {
+      margin: 0 5px 0 0;
+      width: 2em;
+      height: auto;
+    }
+  }
 }
 
 div {
@@ -75,7 +84,15 @@ div {
   justify-content: space-around;
   &.input-container {
     justify-content: flex-start;
+    margin: 10px;
   }
+  &.input-area{
+    flex-flow: nowrap;
+  }
+}
+
+.input-area{
+  margin: 5px 10px;
 }
 
 table {
@@ -94,15 +111,14 @@ table {
         background-color: darken(@main-background, 10%);
       }
     }
-    td{
-      &.green-status{
-        color: @green-status;
-      }
-      &.red-status{
-        color: @red-status;
-      }
-    }
   }
+}
+
+.green-status{
+  color: @green-status;
+}
+.red-status{
+  color: @red-status;
 }
 
 // Скрыть последние два столбца на узких экранах

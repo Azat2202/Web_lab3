@@ -43,11 +43,7 @@ public class PointHandler implements Serializable {
             float y = Float.parseFloat(params.get("y"));
             float r = Float.parseFloat(params.get("r"));
 
-            final Point attemptBean = new Point(
-                    x / r * this.point.getR(),
-                    y / r * this.point.getR(),
-                    this.point.getR()
-            );
+            final Point attemptBean = new Point(x, y, r);
             attemptBean.setTime(DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now()));
             attemptBean.setStatus(PointValidator.isHit(x, y, r));
             attemptBean.setScriptTime((long) ((System.nanoTime() - timer) * 0.01));
