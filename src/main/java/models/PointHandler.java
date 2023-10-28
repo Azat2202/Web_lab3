@@ -1,6 +1,7 @@
 package models;
 
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import validators.PointValidator;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedList;
+import java.util.Map;
 
 @Named("pointHandler")
 @SessionScoped
@@ -22,13 +24,37 @@ public class PointHandler implements Serializable {
     }
 
     public void add(){
-        long timer = System.currentTimeMillis();
+        long timer = System.nanoTime();
         point.setTime(DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now()));
         point.setStatus(PointValidator.isHit(point.getX(), point.getY(), point.getR()));
-        point.setScriptTime(System.currentTimeMillis() - timer);
+        point.setScriptTime((long) ((System.nanoTime() - timer) * 0.01));
 
-        points.add(point);
+        points.addFirst(point);
         point = new Point(point.getX(), point.getY(), point.getR());
+    }
+
+    public void addFromJS(){
+        long timer = System.nanoTime();
+        final Map<String, String> params = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        params.values().forEach(System.out::println);
+
+        try {
+            float x = Float.parseFloat(params.get("x"));
+            float y = Float.parseFloat(params.get("y"));
+            float r = Float.parseFloat(params.get("r"));
+
+            final Point attemptBean = new Point(
+                    x / r * this.point.getR(),
+                    y / r * this.point.getR(),
+                    this.point.getR()
+            );
+            attemptBean.setTime(DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now()));
+            attemptBean.setStatus(PointValidator.isHit(x, y, r));
+            attemptBean.setScriptTime((long) ((System.nanoTime() - timer) * 0.01));
+            this.points.addFirst(attemptBean);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     public Point getPoint() {

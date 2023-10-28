@@ -66,10 +66,22 @@ public class Point implements Serializable {
         return status;
     }
 
+    public String getStatusWord(){
+        return (status)
+                ? "Попадание"
+                : "Промах";
+    }
+
     public String getStatusString(){
         return (status)
                 ? "попадание"
                 : "промах";
+    }
+
+    public String getStatusHTMLClass(){
+        return (status)
+                ? "green-status"
+                : "red-status";
     }
 
     public void setStatus(Boolean status) {

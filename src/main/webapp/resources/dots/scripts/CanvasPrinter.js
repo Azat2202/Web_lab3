@@ -19,7 +19,6 @@ class CanvasPrinter{
         this.drawAxes();
         this.setPointerAtDot(3);
         this.setPointerAtDot(1);
-        this.drawPoints();
     }
 
     redrawAll(r){
@@ -109,19 +108,21 @@ class CanvasPrinter{
         const xPixels = event.clientX - this.canvas.getBoundingClientRect().left;
         const yPixels = event.clientY - this.canvas.getBoundingClientRect().top;
         const pointInPixels = this.SIZE / totalPoints;
-        const x = - (this.SIZE / 2 - xPixels) / pointInPixels
-        const y = (this.SIZE / 2 - yPixels) / pointInPixels
+        const x = (- (this.SIZE / 2 - xPixels) / pointInPixels).toFixed(4)
+        const y = ((this.SIZE / 2 - yPixels) / pointInPixels).toFixed(4)
 
-        if(x > 3 || x < -5 || y > 3 || y < -3) {
+        console.log(x, y)
+
+        if(x > 2 || x < -2 || y > 3 || y < -3) {
             Swal.fire({
                 title: 'Клик вне зоны графика',
-                text: 'X принимает значения от -5 до 3\n Y от -3 до 3',
+                text: 'X принимает значения от -2 до 2\n Y от -3 до 3',
                 icon: 'warning'
             });
             return
         }
 
-        if(!validator.lastClickedR) {
+        if(!this.lastClickedR) {
             Swal.fire({
                 title: 'Невозможно определить радиус',
                 text: 'Выберите радиус',
@@ -129,26 +130,41 @@ class CanvasPrinter{
             });
             return
         }
-        sendPoint(x.toFixed(3), y.toFixed(3), validator.lastClickedR)
-        location.reload()
+
+        addAttempt(
+            [
+                { name: "x", value: x.toString() },
+                { name: "y", value: y.toString() },
+                { name: "r", value: this.lastClickedR.toString() }
+            ]
+        ).then(
+            canvasPrinter.redrawAll(canvasPrinter.lastClickedR)
+        )
+
+        updateGraph();
+        // $('select option:not(:contains(x))').prop('selected', false)
+        // $('select option:contains(x)').prop('selected', true)
+        // $('select option').click()
+        // $('.Y-input').val(y)
+        // $('input[type=submit]').click()
     }
 
     drawPoints(){
         var arrData=[];
-        $(".mainTable tr").each(function(){
+        $(".main-table tr").each(function(){
             let currentRow=$(this);
             arrData.push({
                 "x": parseFloat(currentRow.find("td:eq(0)").text()),
                 "y": parseFloat(currentRow.find("td:eq(1)").text()),
                 "r": parseInt(currentRow.find("td:eq(2)").text()),
-                "status": currentRow.find("td:eq(3)").text() === "Попадание",
+                "status": currentRow.find("td:eq(3)").text() === "попадание",
                 "time": currentRow.find("td:eq(4)").text(),
                 "scriptTime": currentRow.find("td:eq(5)").text()
             })
         });
         arrData.shift() // Delete headers
         arrData.forEach(dot =>{
-            this.drawPoint(dot.x, dot.y, dot.r, dot.status)
+            canvasPrinter.drawPoint(dot.x, dot.y, dot.r, dot.status)
         })
     }
 
