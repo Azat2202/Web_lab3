@@ -5,4 +5,5 @@ window.onload = function (){
     canvasPrinter.canvas.addEventListener('click', function(event) {
         canvasPrinter.parseClick(event)
     });
+    setInterval(checkUpdate, 10000);
 }

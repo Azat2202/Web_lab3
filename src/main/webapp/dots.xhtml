@@ -81,6 +81,13 @@
                 </div>
                 <div class="input-container" id="buttons-container">
                     <h:button value="Назад" styleClass="surfing-button main-button" outcome="go-to-index" id="go_to_index_button"/>
+<!--                    <h:commandButton type="button"-->
+<!--                                     ajax="false"-->
+<!--                                     id="clear"-->
+<!--                                     styleClass="main-button"-->
+<!--                                     value="Очистить"-->
+<!--                                     update="table @form graphPanel"-->
+<!--                                     action="#{pointHandler.clear()}"/>-->
                     <h:commandButton type="submit"
                                      id="check"
                                      styleClass="main-button"
@@ -127,7 +134,9 @@
             canvasPrinter.redrawAll(canvasPrinter.lastClickedR);
         </h:outputScript>
     </h:panelGroup>
+
     <p:remoteCommand name="addAttempt" action="#{pointHandler.addFromJS()}" update="table" process="@this"/>
     <p:remoteCommand name="updateGraph" update="graphPanel" process="@this"/>
+    <p:remoteCommand name="checkUpdate" action="#{pointHandler.loadPointsFromDb()}" update="checkUpdate" process="@this"/>
 </h:body>
 </html>

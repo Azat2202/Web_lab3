@@ -1,5 +1,6 @@
 package models;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +9,7 @@ import jakarta.persistence.Id;
 import java.io.Serializable;
 
 @Named("abstractPoint")
-@SessionScoped
+@ApplicationScoped
 public class Point implements Serializable {
     @Id
     @GeneratedValue
@@ -28,6 +29,16 @@ public class Point implements Serializable {
         this.x = x;
         this.y = y;
         this.r = r;
+    }
+
+    public Point(Long id, float x, float y, float r, Boolean status, String time, long scriptTime) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        this.status = status;
+        this.time = time;
+        this.scriptTime = scriptTime;
     }
 
     public Long getId() {

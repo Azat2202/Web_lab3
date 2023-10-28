@@ -1,11 +1,19 @@
 package models;
 
+import database.DatabaseHandler;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
+import jakarta.persistence.PostPersist;
+import jakarta.persistence.PostUpdate;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import validators.PointValidator;
 
 import java.io.Serializable;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -13,7 +21,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 @Named("pointHandler")
-@SessionScoped
+@ApplicationScoped
 public class PointHandler implements Serializable {
 
     private Point point = new Point();
@@ -23,14 +31,29 @@ public class PointHandler implements Serializable {
         return points;
     }
 
+    @PostConstruct
+    public void loadPointsFromDb(){
+        this.points = DatabaseHandler.getDatabaseManager().loadCollection();
+    }
+
     public void add(){
         long timer = System.nanoTime();
         point.setTime(DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now()));
         point.setStatus(PointValidator.isHit(point.getX(), point.getY(), point.getR()));
         point.setScriptTime((long) ((System.nanoTime() - timer) * 0.01));
 
-        points.addFirst(point);
+        this.addPoint(point);
         point = new Point(point.getX(), point.getY(), point.getR());
+    }
+
+    public void clear(){
+//        System.out.println("clear");
+//        try {
+//            DatabaseHandler.getDatabaseManager().clearCollection();
+//            this.points.clear();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void addFromJS(){
@@ -47,9 +70,11 @@ public class PointHandler implements Serializable {
             attemptBean.setTime(DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now()));
             attemptBean.setStatus(PointValidator.isHit(x, y, r));
             attemptBean.setScriptTime((long) ((System.nanoTime() - timer) * 0.01));
-            this.points.addFirst(attemptBean);
+            this.addPoint(attemptBean);
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            System.out.println(e.getCause());
+            System.out.println(e.getMessage());
+            System.out.println(e.getLocalizedMessage());
         }
     }
 
@@ -59,6 +84,11 @@ public class PointHandler implements Serializable {
 
     public void setPoint(Point point) {
         this.point = point;
+    }
+
+    public void addPoint(Point point){
+        DatabaseHandler.getDatabaseManager().addPoint(point);
+        this.points.addFirst(point);
     }
 
     public void setPoints(LinkedList<Point> points) {
