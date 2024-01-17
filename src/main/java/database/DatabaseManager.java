@@ -9,8 +9,8 @@ import java.util.*;
 
 public class DatabaseManager {
     private Connection connection;
-    private final String user = "s368796";
-    private final String password = "xtS54s6B76UVPt61";
+    private final String user = "...";
+    private final String password = "...";
     private final String DATABASE_URL = "jdbc:postgresql://localhost:5432/studs";
     public final String DATABASE_URL_HELIOS = "jdbc:postgresql://pg:5432/studs";
 
